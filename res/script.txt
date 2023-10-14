@@ -1,0 +1,102 @@
+new-project 100 82
+add-layer image
+add-image-to-layer image res/nap1.png 0 0
+save-image res/temp/nap1.ppm
+save-image res/temp/nap1.png
+save-image res/temp/nap1.jpg
+quit
+new-project 1200 246
+
+add-layer red-component
+set-filter red-component red-component
+add-image-to-layer red-component res/temp/nap1.ppm 0 0 
+add-image-to-layer red-component res/nap1.png 83 0
+add-image-to-layer red-component res/temp/nap1.jpg 165 0
+
+add-layer green-component
+set-filter green-component green-component
+add-image-to-layer green-component res/temp/nap1.ppm 0 101 
+add-image-to-layer green-component res/nap1.png 83 101 
+add-image-to-layer green-component res/temp/nap1.jpg 165 101 
+
+add-layer blue-component
+set-filter blue-component blue-component
+add-image-to-layer blue-component res/temp/nap1.ppm 0 201 
+add-image-to-layer blue-component res/nap1.png 83 201 
+add-image-to-layer blue-component res/temp/nap1.jpg 165 201 
+
+save-image res/temp/napsRGB.png
+save-image res/temp/napsRGB.jpg
+save-image res/temp/napsRGB.ppm
+save-project res/temp/napsRGB.txt
+quit
+load-project res/temp/napsRGB.txt
+
+set-filter background red-component 
+
+add-layer darken-value
+set-filter darken-value darken-value
+add-image-to-layer darken-value res/temp/nap1.ppm 0 301
+add-image-to-layer darken-value res/nap1.png 83 301
+add-image-to-layer darken-value res/temp/nap1.jpg 165 301
+
+add-layer darken-intensity
+set-filter darken-intensity darken-intensity
+add-image-to-layer darken-intensity res/temp/nap1.ppm 0 401
+add-image-to-layer darken-intensity res/nap1.png 83 401
+add-image-to-layer darken-intensity res/temp/nap1.jpg 165 401
+
+add-layer darken-luma
+set-filter darken-luma darken-luma
+add-image-to-layer darken-luma res/temp/nap1.ppm 0 501
+add-image-to-layer darken-luma res/nap1.png 83 501
+add-image-to-layer darken-luma res/temp/nap1.jpg 165 501
+
+add-layer brighten-value
+set-filter brighten-value brighten-value
+add-image-to-layer brighten-value res/temp/nap1.ppm 0 601
+add-image-to-layer brighten-value res/nap1.png 83 601
+add-image-to-layer brighten-value res/temp/nap1.jpg 165 601
+
+add-layer brighten-intensity
+set-filter brighten-intensity brighten-intensity
+add-image-to-layer brighten-intensity res/temp/nap1.ppm 0 701
+add-image-to-layer brighten-intensity res/nap1.png 83 701
+add-image-to-layer brighten-intensity res/temp/nap1.jpg 165 701
+
+add-layer brighten-luma
+set-filter brighten-luma brighten-luma
+add-image-to-layer brighten-luma res/temp/nap1.ppm 0 801
+add-image-to-layer brighten-luma res/nap1.png 83 801
+add-image-to-layer brighten-luma res/temp/nap1.jpg 165 801
+
+add-layer blend-bg
+set-filter blend-bg normal
+add-image-to-layer blend-bg res/garrett_eddy_chillin.ppm 0 901
+
+add-layer difference
+set-filter difference difference
+add-image-to-layer difference res/temp/nap1.ppm 0 901
+add-image-to-layer difference res/nap1.png 83 901
+add-image-to-layer difference res/temp/nap1.jpg 165 901
+
+add-layer multiply
+set-filter multiply multiply
+add-image-to-layer multiply res/temp/nap1.ppm 0 1001
+add-image-to-layer multiply res/nap1.png 83 1001
+add-image-to-layer multiply res/temp/nap1.jpg 165 1001
+
+add-layer screen
+set-filter screen screen
+add-image-to-layer screen res/temp/nap1.ppm 0 1101
+add-image-to-layer screen res/nap1.png 83 1101
+add-image-to-layer screen res/temp/nap1.jpg 165 1101
+
+
+save-image res/temp/napsRGB2.png
+save-image res/temp/napsRGB2.jpg
+save-image res/temp/napsRGB2.ppm
+save-project res/temp/napsRGB2.txt
+quit
+quit
+

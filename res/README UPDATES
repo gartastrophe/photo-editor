@@ -1,0 +1,380 @@
+README Changes:
+
+The file
+  res/creative-commons-zero.png
+is a file from the following link
+https://www.flaticon.com/free-icon/creative-commons-zero_6548116
+and attributable to Bharat Icons.
+It is not our own and is attributable
+under creative commons 3.  Here is
+the formal attribution:
+<a href="https://www.flaticon.com/free-icons/zero" title="zero icons">Zero icons created by Bharat Icons - Flaticon</a>
+
+
+MODEL:
+added a new ModelImpl: CollageModelImpl3
+
+toIntermediaryString added to CollageModelImpl3:
+- according to previous and current models,
+  the background layer must be in three
+  components.  While the background is
+  always solid in the current iteration
+  of CollageModel, we wanted to make sure
+  the CollageModel would be able to handle
+  transparency as per Piazza.  For future-
+  proofing the design, the toIntermediary
+  String method was added to preserve the
+  alpha value until later.
+- As a proof of concept, CollageModelImpl3Mock
+  (in the test folder) was created WITHOUT a
+  base white background to see it would preserve
+  alpha values.  It did (with the help of the
+  toIntermediaryString method).
+
+CONTROLLER:
+
+Features was improved to use the ControllerOperations like the
+CollageControllerImpl class.  This is to reduce code reuse;
+they were functionally doing the same thing before.
+
+IOUtil class overhauled with new Interface and Class
+- IOUtil Interface (figuratively) extends the design
+  and says what it plans on doing
+- IOUtil2 allows for the extra functionality of PNGs and JPGs
+
+ControllerOperations:
+
+The CollageControllerImpl added a constructor that could take
+in a IOUtilInterface such that the class could use a larger
+variety of IO utilities without manually having to change the
+code.
+
+The following classes were overhauled to accommodate the
+IOUtil change:
+- OpAddImageToLayer
+- OpLoadProject
+- OpSaveImage
+- OpSaveProject
+
+the ioUtil is added to saving and loading images because
+it is relevant to have more than 3 types of images to read/
+write from; it is not the same relevant to do the same for
+the load/save project ControllerOperations; text is fine.
+
+An interface was also added to help decouple the code.
+
+The adapters for converting PPMs and PixelGrids into a Buffered
+Image did not get an interface however because Images are already
+a class and an interface cannot implement/extend a class.  Also,
+there are not super set in stone functionality between the two.
+Ideally, these two could be compressed into a single class that
+can convert model representations into BufferedImages.
+
+the original IOUtil class was slightly modified to fix a
+bug where the scanner would look for the first character in
+a line even if the line had no characters.  This bug was fixed
+to help the IOUtil to also read in the script.
+
+GUI:
+The gui was updated to avoid try-catching in the gui;
+the try-catch block has been moved to the Features
+Controller for better MVC separation.
+
+Additionally we fixed bugs from the previous version,
+specifically, we added RadioButtons on the right
+hand side for adding images and applying filters.
+This fixed the bug where the list of layers would
+not show up on the side.  This impl also allows
+layers to be "highlighted" as per the specifications
+while adding extra functionality.
+
+We added a scrollable as mentioned in the previous
+assignment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TESTING INSTRUCTIONS:
+We ran out of room in the res folder.
+- To run testing PLEASE RUN THE TEST FOLDER TWICE!
+- The tests will render the images into the res folder.
+
+The ppm files:
+- garrett_eddy_chillin_difference.ppm
+- garrett_eddy_chillin_multiply.ppm
+- garrett_eddy_chillin_screen.ppm
+all come from our own ppm file
+garrett_eddy_chillin.ppm. These
+ppm files represent the ppm format
+with a background, a middle layer
+with a 3 by 3 grid of colours and
+our image on top.  See
+test/CreateFilteredImagesExampleTest
+to learn more.
+
+
+Implementations
+- JSwing
+- GUI current image
+- PPM controls
+- List of layers
+- expose all the required features
+    new project
+    load a project (never tested)
+    adding an image to a layer
+    adding a layer
+    setting a filter
+    saving an image
+    saving a project
+- save what user is seeing
+- no hard-coded files
+- error messages
+- file picker
+- Jar file that runs (discounting impl flaws)
+
+
+Implementations flaws:
+- No scrollable
+- no Layer highlight in sidebar
+- Layers may not show up until
+  after resizing the image
+- error messages should
+  be handled through the
+  controller; not enough
+  time to change now :(
+- ideally we would also be
+  using builder design
+  pattern and method for
+  the buttons
+
+
+MODEL CHANGES:
+Added Pixel interface to replace Color:
+- Added the following classes/interfaces:
+    - a Pixel Interface with observers for
+      RGB, HSL, and the ProjectString format.
+    - an AbstractPixel abstract class that
+      implements these methods.
+    - an RGBPixel class to construct a pixel
+      based on the RGB or RGBA format
+    - an HSLPixel class to construct a pixel
+      based on the HSL format
+This was done to increase future extensibility
+and avoid a massive expansion of the ColourUtil
+class.  Pixel also allows for way more accuracy
+in that the data is stored as percentages rather
+than integers.  This also enables the toProjString
+new implementation for better flow from and to the
+Model
+
+Layer interface was updated to end explicit coupling
+with the Color class:
+- Added an AbstractLayer class to handle the Abstract-able
+  portion of the Layer code
+- Added a Pixel-specific implementation called LayerPixelImpl
+- Removed the deepCopyGrid method as the functionality could
+  effectively be performed by merging a transparent layer
+  over the grid.
+
+Model Interface & functionality changed to accommodate:
+- the pivot to Pixel instead of Color
+- the pivot to avoid writing to files in the model
+
+FilterOption changed to apply the Filter to two different
+Pixels, a top Pixel and a bottom Pixel:
+- FilterOption now computes the final colour of the two
+- AbstractSingleFilter used to preserve backwards compatibility
+  with ColourComponents and Brightness filters
+- BlendFilters added using the given two-Pixel implementation
+
+PPMUtil created:
+- New PPMUtil class specifically handles the
+  String-to-PPM and PPM-to-String conversion
+  and does NOT handle any file reading/writing
+
+CONTROLLER CHANGES:
+Controller now handles file reading/writing:
+- IOUtil created to deal with the file reading/
+  writing process instead of ImageUtil.  Its
+  methods only convert from Strings to Files
+  and vice versa.
+- controller operations adjusted to accommodate
+  this change, specifically the following function
+  objects:
+    - OpAddImageToLayer
+    - OpLoadProject
+    - OpSaveImage
+    - OpSaveProject
+- Added a PPMToBufferedImage class adapter to
+  convert PPMStrings to Java's built-in image
+  interface for rendering with JSwing
+    - This conversion is also good in that
+      Java's built in BufferedImage class
+      can already handle jpegs and pngs
+      which makes this choice extensible.
+
+
+VIEW CHANGES:
+- View can not render images w/ the help of
+  PPMToBufferedImage
+- GUI implementations
+
+
+
+
+README ORIGINAL
+
+Assignment 4 - Collaging
+Edward Liu, Garrett Compston
+
+PROGRAM SCRIPT
+Enter the following script in the main method 'CollageProgram'.
+Items in brackets [] are variable inputs which can be anything within the type given.
+The word after a given type is not necessary for entry, just for keeping track of when
+  certain values must be repeated (such as the case of layerName).
+Filter Names can be found in 'CollageModelImpl', some examples are 'red-component',
+  'brighten-value', 'darken-luma'.
+'quit' is called twice, once to quit the project, once more to quit the main method.
+Every line break implies hitting enter and running the specific function.
+---
+new-project [int height] [int width]
+add-layer [string layerName]
+add-image-to-layer [string layerName] [string image-fileName] [int x-coord] [int y-coord]
+set-filter [string layerName] [string filterName]
+set-filter [string layerName] [string filterName2]
+save-project [string projectFileName]
+save-image [string imageFileName]
+quit
+quit
+---
+
+The following is a copy-paste-able sample script:
+
+    new-project 4 4
+    add-layer layer-a
+    add-layer layer-b
+    add-image-to-layer layer-a res/wrgb2x2.ppm 2 2
+    add-image-to-layer layer-a res/wrgb2x2.ppm 1 1
+    add-image-to-layer layer-b res/wrgb2x2.ppm 2 0
+    set-filter layer-b darken-value
+    set-filter layer-a red-component
+    save-project project1
+    save-image project1Image
+    quit
+    quit
+
+The following is an explanation of what each operation does:
+//creates a new project that is four-by-four
+    new-project 4 4
+//adds a layer named "layer-a"
+    add-layer layer-a
+//adds a layer named "layer-b"
+    add-layer layer-b
+//adds the image "wrgb2x2.ppm" in the res folder to "layer-a"
+//at the location 2 down and 2 to the right
+    add-image-to-layer layer-a res/wrgb2x2.ppm 2 2
+//adds the image "wrgb2x2.ppm" in the res folder to "layer-a"
+//at the location 1 down and 1 to the right
+    add-image-to-layer layer-a res/wrgb2x2.ppm 1 1
+//adds the image "wrgb2x2.ppm" in the res folder to "layer-b"
+//at the location 0 down and 2 to the right
+    add-image-to-layer layer-b res/wrgb2x2.ppm 2 0
+//sets the filter on layer-b to "darken-value";
+// - this should show up in the project file
+// - this should make layer-b completely black
+// - when printing the image, it should be completely black
+    set-filter layer-b darken-value
+//sets the filter on layer-a to "red-component";
+    set-filter layer-a red-component
+//creates a new file called "project1.txt" in the
+//res folder
+    save-project project1
+//saves a new PPM file as "project1Image.ppm" in the
+//res folder
+    save-image project1Image
+//quits the project but does NOT end the program
+    quit
+//quits the program since no project is open
+    quit
+
+
+
+IMAGE USED
+This is a picture that we took together, so it is fully our own, and we authorize its use.
+
+CODE OVERVIEW
+
+MODEL
+The model package contains information about the collager's current state as well as its
+functionality. These will be broken down package by package within this greater package.
+
+No Package
+  Firstly, the classes without an interior package are both utility classes, 'ColourUtil' being
+  used to get information about a given color and 'ImageUtil' being used to read and write
+  projects as well as image files in the PPM format.
+
+model
+  These hold the specific implementations of the Collager as a whole containing all of its
+  functionality. The order of hierarchy goes as such: 'CollageModelState' is extended by
+  'CollageModel' is implemented by 'AbstractCollageModel' is extended by 'CollageModelImpl'.
+  'CollageModelImpl' is purely used for issues with obtaining filters. 'AbstractCollageModel'
+  is most important for its usage by the controller as all of the specific functions of the
+  collager are defined here.
+
+layer
+  The layer package handles all operations on a single layer as well as between layers. Whenever
+  a layer is created whether singluarly or by merging or other operation, its properties
+  are derived from these implementations. Some functionality found in the collager that
+  has to do with the direct alteration of what is on the layers (as opposed to operations
+  on the program as a whole) are handled in this package.
+
+filter.option
+  First, to go over the classes in the package itself. The normal filter simply performs the
+  application of currently given colors, acts as essentially no filter and allows for a point
+  of reference once filters are applied. 'AbstractFilterOption' then holds methods for applying
+  different colors and brightness values to layers.
+  Now, for the subpackages.
+
+    brightness
+	  Holds classes which run the applyToColor method with specifications for the brightening or
+	  darkening of the brightness types intensity, luma, and value.
+
+    colour.components
+	  Holds classes which run the applyToColor method with specifications for the filtering out
+	  of red, green, or blue values.
+
+VIEW
+The view in its current state only has the one interface and implementing class. The intention of
+both of these is to be able to send messages to the client for specific actions including
+the completion of an event, an event going wrong in some way, and providing information upon
+client request.
+
+CONTROLLER
+The controller executes the functionality of the model by request of the client.
+
+No Package
+  These classes call the classes and methods that can respond to user input. This includes
+  rendering messages for the client like producing a list of commands and importantly,
+  running the collager.
+
+operations
+  These classes are the actual functionality that the client has control over. The controller
+  operations interface has an execute method which performs the given operation on the
+  model. It is extended to each of the classes with different functionalities so that they can
+  take in their necessary inputs. Each of these classes has only a constructor and an
+  execute method so that it can perform its task and nothing else.
+
+Code Citation:
+  The following resource was used (see ImageUtil).
+  https://stackoverflow.com/questions/23857505/java-writing-file-access-is-denied

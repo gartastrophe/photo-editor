@@ -1,0 +1,130 @@
+USEME 
+
+GUI Instructions
+
+SCRIPT INSTRUCTIONS:
+give the main the following params:
+    -file res/script.txt
+and it will run.
+
+CollageProgram
+add the following commands to the run configurations:
+instructions:
+- go to run
+- edit configurations
+- application
+- the plus symbol in the top right
+- in the main class put in "CollageProgram"
+- in the program arguments put in one of the following
+    - "java -jar Program.jar -file path-of-script-file"
+    open the script file, execute it and then shut down
+    - "java -jar Program.jar -text"
+    open in an interactive text mode
+    - "java -jar Program.jar"
+    open the graphical user interface
+
+
+The following is a runnable script:
+
+new-project 4 4
+add-layer layer-a
+add-layer layer-b
+add-image-to-layer layer-a res/wrgb2x2.ppm 2 2
+add-image-to-layer layer-a res/wrgb2x2.ppm 1 1
+add-image-to-layer layer-b res/wrgb2x2.ppm 2 0
+set-filter layer-b darken-value
+set-filter layer-a red-component
+save-project res/project1.txt
+save-image res/project1Image.ppm
+quit
+quit
+
+Copy and paste above into a new text document called
+"script.txt" and set the run configurations to:
+    java -jar Program.jar -file script.txt
+to run from a file.
+
+
+Functionality Supported:
+- Creating a new project
+- loading a project
+- Saving current image
+- saving current project
+- Adding a layer
+- Adding an image to a layer
+- Selecting a filter to apply to a layer
+
+New Project
+- Click on the New Project button
+- Enter a string for the desired project name
+- Click OK or hit enter to confirm
+- Enter width and height (in pixels) as integers as you are
+  prompted for them, confirming in the same fashion
+- Now a border should be created on the GUI labeled as the
+  name that you gave the project
+
+Load Project
+- before you open a project:
+- Click the load project button
+- Use the file picker and navigate to the project
+- click the image you want
+- Click OK or hit enter to confirm
+
+Add Layer
+- Click on the Add Layer button
+- Enter a string for the desired layer name
+- Click OK or hit enter to confirm
+- Now the layer name should be visible underneath layer list
+
+Add Image
+- click on the layer you want to add to from the
+  list of filters on the right by clicking on the
+  corresponding radio button
+- Click the Add Image button
+- Use the file picker and navigate to the image
+- click the image you want
+- Click OK or hit enter to confirm
+- give the x and y coordinates as integers
+- Click OK or hit enter to confirm
+- The image should now be visible in the project area
+
+Save Image
+- Click the Save Image icon
+- It will open a file save panel
+- Enter the name you would like to give the file in the
+  File Name area
+- name the file with one of the following suffixes
+  - ppm
+  - png
+  - jpg
+- add ".suffix" to the end of the name of your
+  file and make it that such file:
+  - a suffix of ".ppm" will create a ppm file;
+  - a suffix of ".png" will create a png file;
+  - a suffix of ".jpg" will create a jpg file.
+- Select the folder you would like to send the file to
+- Click on Save to confirm
+- The file should now be accessible from where you saved
+  it to
+
+Save Project
+- Click the save project icon
+- It will open a file save panel
+- Enter the name you would like to give the file in the
+  File Name area
+- name the file with one of the following suffixes
+  - txt
+- add the suffix after a period.  for exmaple
+  - example.txt
+- Click on Save to confirm
+- The file should now be accessible from where you saved
+  it to
+
+Set Filter
+- click on the layer you want to apply the filter
+  to on the right bar.
+- Click on your desired filter from the dropdown
+  in the top right
+
+
+

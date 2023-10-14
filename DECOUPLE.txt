@@ -1,0 +1,46 @@
+DECOUPLE
+
+Model Interfaces Needed to Compile:
+
+CollageModel, CollageModelState
+
+CollageModel implements CollageModelState so it is necessary 
+for the two to be implemented together. CollageModel is required
+because the Features interface requires a Model to reference so
+that the model can be fully decoupled from the view.
+
+Pixel
+
+Pixel is referenced in many of the controller utils as many of 
+these involve rendering images, requiring grids of pixels. 
+
+Model Classes Needed to Compile:
+
+RGBPixel
+
+The only reason that this is a class and not included in the
+Pixel interface is that this contains a convenience constructor
+which is very useful for creating grids of pixels as these pixels
+need to be instantiated which becomes complicated using a pixel
+interface.
+
+PPMUtil
+
+This class is a particularly useful model class for reading and
+writing PPM files. It allows the controller to create images 
+that are displayable by the view GUI implementation. It is,
+similar to RGBPixel, only required by the controller utils and 
+thus is used sparingly by the controller at all.
+
+
+View Interfaces Needed to Compile:
+
+CollageView, ImageCollageView
+
+CollageView is required by the Features interface as it requires
+a view to reference to, similarly to CollageModel and 
+CollageModelState being referenced by Features, to decouple the
+view from the model. ImageCollageView is referenced by the 
+FeaturesController class so it is necessary for implementation 
+there.
+
