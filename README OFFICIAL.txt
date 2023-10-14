@@ -1,5 +1,7 @@
 README
 
+This code was written in collaboration between Garrett Compston and Edward Liu
+
 Intro to the Collager:
 
 This program creates a workspace for users to add and edit 
